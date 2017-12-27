@@ -9,6 +9,7 @@ import android.database.DataSetObserver;
 import android.os.Build;
 import android.support.annotation.AnimatorRes;
 import android.support.annotation.DrawableRes;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ public class CircleIndicator extends LinearLayout {
 
     private final static int DEFAULT_INDICATOR_WIDTH = 5;
     private ViewPager mViewpager;
+    private int mItemCount = -1;
     private int mIndicatorMargin = -1;
     private int mIndicatorWidth = -1;
     private int mIndicatorHeight = -1;
@@ -251,7 +253,7 @@ public class CircleIndicator extends LinearLayout {
 
     private void createIndicators() {
         removeAllViews();
-        int count = mViewpager.getAdapter().getCount();
+        int count = mItemCount > -1 ? mItemCount : mViewpager.getAdapter().getCount();
         if (count <= 0) {
             return;
         }
@@ -303,5 +305,16 @@ public class CircleIndicator extends LinearLayout {
     public int dip2px(float dpValue) {
         final float scale = getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * Set a custom indicator number that could match or not the number of pages inside the
+     * {@link ViewPager}.
+     * To reset the item count and use {@link PagerAdapter#getCount()} instead, set -1.
+     *
+     * @param itemCount Custom item count
+     */
+    public void setCustomItemCount(int itemCount) {
+        mItemCount = itemCount;
     }
 }
